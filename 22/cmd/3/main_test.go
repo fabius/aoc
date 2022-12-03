@@ -2,9 +2,11 @@ package main
 
 import "testing"
 
+var testInputFile = "../../data/3_test.txt"
+
 func TestA(t *testing.T) {
 	want := 157
-	have := solveA("../../data/3_test.txt")
+	have := solveA(testInputFile)
 	if want != have {
 		t.Fatalf("want %d != have %d\n", want, have)
 	}
@@ -12,7 +14,7 @@ func TestA(t *testing.T) {
 
 func TestB(t *testing.T) {
 	want := 70
-	have := solveB("../../data/3_test.txt")
+	have := solveB(testInputFile)
 	if want != have {
 		t.Fatalf("want %d != have %d\n", want, have)
 	}

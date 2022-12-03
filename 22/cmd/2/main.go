@@ -95,6 +95,6 @@ func solveB(f string) int {
 }
 
 func main() {
-	fmt.Printf("%d\n", solveA("22/data/2.txt"))
-	fmt.Printf("%d\n", solveB("22/data/2.txt"))
+	fmt.Printf("%d\n", solveA("data/2.txt"))
+	fmt.Printf("%d\n", solveB("data/2.txt"))
 }

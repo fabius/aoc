@@ -89,6 +89,6 @@ func solveB(f string) int {
 }
 
 func main() {
-	fmt.Println(solveA("22/data/1.txt"))
-	fmt.Println(solveB("22/data/1.txt"))
+	fmt.Println(solveA("data/1.txt"))
+	fmt.Println(solveB("data/1.txt"))
 }
