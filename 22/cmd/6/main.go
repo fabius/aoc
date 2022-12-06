@@ -30,12 +30,9 @@ func unique(s []byte) bool {
 }
 
 func solve(in string, bufSize int) int {
-	buf := make([]byte, bufSize)
-	for i := bufSize - 1; i >= 0; i-- {
-		buf[bufSize-1-i] = in[i]
-	}
+	buf := []byte(in[:bufSize])
 	for i := bufSize; i < len(in); i++ {
-		buf[bufSize-1-(i%bufSize)] = in[i]
+		buf[i%bufSize] = in[i]
 		if unique(buf) {
 			return i + 1
 		}
