@@ -10,7 +10,7 @@ import (
 
 var day = 8
 
-func readInput(f string) [][]int {
+func parseInput(f string) [][]int {
 	input, err := os.ReadFile(f)
 	if err != nil {
 		log.Fatalln(err)
@@ -28,40 +28,40 @@ func readInput(f string) [][]int {
 }
 
 func solveA(f string) int {
-	grid := readInput(f)
+	grid := parseInput(f)
 	sum := 0
-	for i, row := range grid {
-		for j, tree := range row {
-			if i == 0 || i == len(grid)-1 || j == 0 || j == len(row)-1 {
+	for y, row := range grid {
+		for x, tree := range row {
+			if y == 0 || y == len(grid)-1 || x == 0 || x == len(row)-1 {
 				sum++
 				continue
 			}
 
 			leftTallest := 0
-			for k := 0; k < j; k++ {
+			for k := 0; k < x; k++ {
 				if row[k] > leftTallest {
 					leftTallest = row[k]
 				}
 			}
 
 			rightTallest := 0
-			for k := len(row) - 1; k > j; k-- {
+			for k := len(row) - 1; k > x; k-- {
 				if row[k] > rightTallest {
 					rightTallest = row[k]
 				}
 			}
 
 			upTallest := 0
-			for k := 0; k < i; k++ {
-				if grid[k][j] > upTallest {
-					upTallest = grid[k][j]
+			for k := 0; k < y; k++ {
+				if grid[k][x] > upTallest {
+					upTallest = grid[k][x]
 				}
 			}
 
 			downTallest := 0
-			for k := len(grid) - 1; k > i; k-- {
-				if grid[k][j] > downTallest {
-					downTallest = grid[k][j]
+			for k := len(grid) - 1; k > y; k-- {
+				if grid[k][x] > downTallest {
+					downTallest = grid[k][x]
 				}
 			}
 
@@ -74,52 +74,40 @@ func solveA(f string) int {
 }
 
 func solveB(f string) int {
-	grid := readInput(f)
+	grid := parseInput(f)
 	score := 0
-	for i, row := range grid {
-		for j, tree := range row {
-			left := 0
-			for k := j - 1; k >= 0; k-- {
+	for y, row := range grid {
+		for x, tree := range row {
+			left := x
+			for k := x - 1; k >= 0; k-- {
 				if row[k] >= tree {
-					left = j - k
+					left = x - k
 					break
 				}
 			}
-			if left == 0 {
-				left = j
-			}
 
-			right := 0
-			for k := j + 1; k < len(row); k++ {
+			right := len(row) - 1 - x
+			for k := x + 1; k < len(row); k++ {
 				if row[k] >= tree {
-					right = k - j
+					right = k - x
 					break
 				}
-			}
-			if right == 0 {
-				right = len(row) - 1 - j
 			}
 
-			up := 0
-			for k := i - 1; k >= 0; k-- {
-				if grid[k][j] >= tree {
-					up = i - k
+			up := y
+			for k := y - 1; k >= 0; k-- {
+				if grid[k][x] >= tree {
+					up = y - k
 					break
 				}
-			}
-			if up == 0 {
-				up = i
 			}
 
-			down := 0
-			for k := i + 1; k < len(grid); k++ {
-				if grid[k][j] >= tree {
-					down = k - i
+			down := len(grid) - 1 - y
+			for k := y + 1; k < len(grid); k++ {
+				if grid[k][x] >= tree {
+					down = k - y
 					break
 				}
-			}
-			if down == 0 {
-				down = len(grid) - 1 - i
 			}
 
 			treeScore := left * right * up * down
