@@ -14,7 +14,7 @@ func readInput(f string) []string {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	return strings.Split(string(input), "\n")
+	return strings.Split(strings.Trim(string(input), "\n"), "\n")
 }
 
 func solveA(f string) int {
