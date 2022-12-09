@@ -60,38 +60,30 @@ func (c *coordinate) follow(h coordinate) {
 	}
 }
 
-func solveA(f string) int {
-	s := coordinate{x: 0, y: 0}
-	h := s
-	t := s
-	tailPositions := map[coordinate]bool{t: true}
-	for _, m := range parseInput(f) {
+func solve(motions []motion, knotCount int) int {
+	knots := []coordinate{}
+	for i := 0; i <= knotCount-1; i++ {
+		knots = append(knots, coordinate{x: 0, y: 0})
+	}
+	tailPositions := map[coordinate]bool{knots[knotCount-1]: true}
+	for _, m := range motions {
 		for i := 1; i <= m.amount; i++ {
-			h.move(m)
-			t.follow(h)
-			tailPositions[t] = true
+			knots[0].move(m)
+			for j := 1; j <= knotCount-1; j++ {
+				knots[j].follow(knots[j-1])
+			}
+			tailPositions[knots[knotCount-1]] = true
 		}
 	}
 	return len(tailPositions)
 }
 
+func solveA(f string) int {
+	return solve(parseInput(f), 2)
+}
+
 func solveB(f string) int {
-	s := coordinate{x: 0, y: 0}
-	knots := []coordinate{}
-	for i := 0; i <= 9; i++ {
-		knots = append(knots, s)
-	}
-	tailPositions := map[coordinate]bool{knots[9]: true}
-	for _, m := range parseInput(f) {
-		for i := 1; i <= m.amount; i++ {
-			knots[0].move(m)
-			for j := 1; j <= 9; j++ {
-				knots[j].follow(knots[j-1])
-			}
-			tailPositions[knots[9]] = true
-		}
-	}
-	return len(tailPositions)
+	return solve(parseInput(f), 10)
 }
 
 func main() {
