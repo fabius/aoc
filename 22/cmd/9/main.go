@@ -32,6 +32,18 @@ func parseInput(f string) []motion {
 
 type coordinate struct{ x, y int }
 
+func (c *coordinate) move(m motion) {
+	if m.direction == "R" {
+		c.x++
+	} else if m.direction == "L" {
+		c.x--
+	} else if m.direction == "U" {
+		c.y++
+	} else if m.direction == "D" {
+		c.y--
+	}
+}
+
 func (c *coordinate) follow(h coordinate) {
 	d := math.Sqrt(math.Pow(float64(h.x-c.x), 2) + math.Pow(float64(h.y-c.y), 2))
 	if d >= 2 {
@@ -55,15 +67,7 @@ func solveA(f string) int {
 	tailPositions := map[coordinate]bool{t: true}
 	for _, m := range parseInput(f) {
 		for i := 1; i <= m.amount; i++ {
-			if m.direction == "R" {
-				h.x++
-			} else if m.direction == "L" {
-				h.x--
-			} else if m.direction == "U" {
-				h.y++
-			} else if m.direction == "D" {
-				h.y--
-			}
+			h.move(m)
 			t.follow(h)
 			tailPositions[t] = true
 		}
@@ -80,15 +84,7 @@ func solveB(f string) int {
 	tailPositions := map[coordinate]bool{knots[9]: true}
 	for _, m := range parseInput(f) {
 		for i := 1; i <= m.amount; i++ {
-			if m.direction == "R" {
-				knots[0].x++
-			} else if m.direction == "L" {
-				knots[0].x--
-			} else if m.direction == "U" {
-				knots[0].y++
-			} else if m.direction == "D" {
-				knots[0].y--
-			}
+			knots[0].move(m)
 			for j := 1; j <= 9; j++ {
 				knots[j].follow(knots[j-1])
 			}
