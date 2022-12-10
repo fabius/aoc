@@ -9,7 +9,7 @@ import (
 
 var day = 0
 
-func readInput(f string) []string {
+func parseInput(f string) []string {
 	input, err := os.ReadFile(f)
 	if err != nil {
 		log.Fatalln(err)
