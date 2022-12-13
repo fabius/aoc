@@ -95,7 +95,21 @@ func solveA(f string) int {
 }
 
 func solveB(f string) int {
-	return 0
+	grid, _, end := parseInput(f)
+	minDist := 0
+	for y, row := range grid {
+		for x, height := range row {
+			if height == int('a') {
+				start := point{x: x, y: y}
+				dist, _ := climb(grid, start, end)
+				newDist := dist[end]
+				if minDist == 0 || newDist < minDist {
+					minDist = newDist
+				}
+			}
+		}
+	}
+	return minDist
 }
 
 func main() {
