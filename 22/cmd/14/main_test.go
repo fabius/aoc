@@ -16,7 +16,7 @@ func TestA(t *testing.T) {
 }
 
 func TestB(t *testing.T) {
-	want := 0
+	want := 93
 	have := solveB(testInputFile)
 	if want != have {
 		t.Fatalf("want %d != have %d\n", want, have)

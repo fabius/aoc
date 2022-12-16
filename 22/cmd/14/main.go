@@ -10,12 +10,13 @@ import (
 
 var day = 14
 
-func parseInput(f string) map[[2]int]bool {
+func parseInput(f string) (map[[2]int]bool, int) {
 	input, err := os.ReadFile(f)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	grid := map[[2]int]bool{}
+	highestY := 0
 	for _, line := range strings.Split(strings.Trim(string(input), "\n"), "\n") {
 		line = strings.ReplaceAll(line, " ", "")
 		line = strings.ReplaceAll(line, ">", "")
@@ -48,6 +49,10 @@ func parseInput(f string) map[[2]int]bool {
 					yi--
 				}
 
+				if yi > highestY {
+					highestY = yi
+				}
+
 				if xi == xr && yi == yr {
 					p := [2]int{xi, yi}
 					grid[p] = true
@@ -56,20 +61,22 @@ func parseInput(f string) map[[2]int]bool {
 			}
 		}
 	}
-	return grid
+	return grid, highestY + 2
 }
 
-func solveA(f string) (sum int) {
-	grid := parseInput(f)
-	fmt.Printf("grid: %v\n", grid)
+func solve(grid map[[2]int]bool, floor *int) (sum int) {
 outer:
 	for ; ; sum++ {
-		fmt.Printf("sum: %v\n", sum)
 		for x, y := 500, 0; ; y++ {
-			// fmt.Printf("%v, %v\n", x, y)
-			if y > 500 {
+			if floor == nil && y > 500 {
 				// fall into the abyss
 				break outer
+			}
+
+			if floor != nil && *floor == y+1 {
+				// come to rest
+				grid[[2]int{x, y}] = true
+				break
 			}
 
 			if !grid[[2]int{x, y + 1}] {
@@ -94,6 +101,11 @@ outer:
 			if downLeft && downRight {
 				// come to rest
 				grid[[2]int{x, y}] = true
+				if x == 500 && y == 0 {
+					// clog up source
+					sum++
+					break outer
+				}
 				break
 			}
 		}
@@ -101,8 +113,14 @@ outer:
 	return sum
 }
 
-func solveB(f string) int {
-	return 0
+func solveA(f string) (sum int) {
+	grid, _ := parseInput(f)
+	return solve(grid, nil)
+}
+
+func solveB(f string) (sum int) {
+	grid, floor := parseInput(f)
+	return solve(grid, &floor)
 }
 
 func main() {
